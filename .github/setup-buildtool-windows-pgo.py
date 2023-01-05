@@ -20,9 +20,9 @@ commands_list = [
         r"pip install six zstandard pyyaml",
         r"cp third_party/python/vsdownload/vsdownload.py vsdownload.py",
         r"cp build/vs/pack_vs.py pack_vs.py",
-        r"cp build/vs/vs2017.yaml vs2017.yaml",
-        r"python3 pack_vs.py -o $RUNNER_USERDIR/win-crosstool/vs2017.tar.zst vs2017.yaml",
-        r"tar --zstd -xvf $RUNNER_USERDIR/win-crosstool/vs2017.tar.zst -C $RUNNER_USERDIR/win-crosstool"
+        r"cp build/vs/vs2019.yaml vs2019.yaml",
+        r"python3 pack_vs.py -o $RUNNER_USERDIR/win-crosstool/vs2019.tar.zst vs2019.yaml",
+        r"tar --zstd -xvf $RUNNER_USERDIR/win-crosstool/vs2019.tar.zst -C $RUNNER_USERDIR/win-crosstool"
     ]
 ]
 
