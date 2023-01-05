@@ -71,17 +71,17 @@ jobs:
         sudo apt update
         sudo apt install zstd p7zip-full
         python3 ./.github/setup-buildtool-windows-pgo.py
-        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2017/dia sdk"
-        chmod -R +x $RUNNER_USERDIR/win-crosstool/vs2017/vc
-        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2017/windows kits/10"
-        export VCTOOL_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc | grep "^[0-9\.]*$")
+        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2019/dia sdk"
+        chmod -R +x $RUNNER_USERDIR/win-crosstool/vs2019/vc
+        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10"
+        export VCTOOL_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc | grep "^[0-9\.]*$")
         echo "VCTOOL_VERSION=$VCTOOL_VERSION" >> $GITHUB_ENV
-        export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2017/vc/redist/msvc | grep "^[0-9\.]*$")
+        export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/redist/msvc | grep "^[0-9\.]*$")
         echo "WIN32_REDIST_VERSION=$WIN32_REDIST_VERSION" >> $GITHUB_ENV
-        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2017/windows kits/10/redist" | grep "^[0-9\.]*$")
+        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/redist" | grep "^[0-9\.]*$")
         echo "WIN_UCRT_REDIST_VERSION=$WIN_UCRT_REDIST_VERSION" >> $GITHUB_ENV
         
-        echo "$RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
+        echo "$RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
 
         ./mach --no-interactive bootstrap --application-choice browser
         $RUNNER_USERDIR/.cargo/bin/rustup target add x86_64-pc-windows-msvc
@@ -242,17 +242,17 @@ jobs:
         sudo apt update
         sudo apt install zstd p7zip-full
         python3 ./.github/setup-buildtool-windows-pgo.py
-        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2017/dia sdk"
-        chmod -R +x $RUNNER_USERDIR/win-crosstool/vs2017/vc
-        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2017/windows kits/10"
-        export VCTOOL_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc | grep "^[0-9\.]*$")
+        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2019/dia sdk"
+        chmod -R +x $RUNNER_USERDIR/win-crosstool/vs2019/vc
+        chmod -R +x "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10"
+        export VCTOOL_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc | grep "^[0-9\.]*$")
         echo "VCTOOL_VERSION=$VCTOOL_VERSION" >> $GITHUB_ENV
-        export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2017/vc/redist/msvc | grep "^[0-9\.]*$")
+        export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/redist/msvc | grep "^[0-9\.]*$")
         echo "WIN32_REDIST_VERSION=$WIN32_REDIST_VERSION" >> $GITHUB_ENV
-        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2017/windows kits/10/redist" | grep "^[0-9\.]*$")
+        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/redist" | grep "^[0-9\.]*$")
         echo "WIN_UCRT_REDIST_VERSION=$WIN_UCRT_REDIST_VERSION" >> $GITHUB_ENV
         
-        echo "$RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
+        echo "$RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
 
         ./mach --no-interactive bootstrap --application-choice browser
         $RUNNER_USERDIR/.cargo/bin/rustup target add x86_64-pc-windows-msvc
