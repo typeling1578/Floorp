@@ -78,7 +78,7 @@ jobs:
         echo "VCTOOL_VERSION=$VCTOOL_VERSION" >> $GITHUB_ENV
         export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/redist/msvc | grep "^[0-9\.]*$")
         echo "WIN32_REDIST_VERSION=$WIN32_REDIST_VERSION" >> $GITHUB_ENV
-        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/redist" | grep "^[0-9\.]*$")
+        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/lib" | grep "^[0-9\.]*$")
         echo "WIN_UCRT_REDIST_VERSION=$WIN_UCRT_REDIST_VERSION" >> $GITHUB_ENV
         
         echo "$RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
@@ -249,7 +249,7 @@ jobs:
         echo "VCTOOL_VERSION=$VCTOOL_VERSION" >> $GITHUB_ENV
         export WIN32_REDIST_VERSION=$(ls $RUNNER_USERDIR/win-crosstool/vs2019/vc/redist/msvc | grep "^[0-9\.]*$")
         echo "WIN32_REDIST_VERSION=$WIN32_REDIST_VERSION" >> $GITHUB_ENV
-        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/redist" | grep "^[0-9\.]*$")
+        export WIN_UCRT_REDIST_VERSION=$(ls "$RUNNER_USERDIR/win-crosstool/vs2019/windows kits/10/lib" | grep "^[0-9\.]*$")
         echo "WIN_UCRT_REDIST_VERSION=$WIN_UCRT_REDIST_VERSION" >> $GITHUB_ENV
         
         echo "$RUNNER_USERDIR/win-crosstool/vs2019/vc/tools/msvc/${VCTOOL_VERSION}/bin/hostx64/x64" >> $GITHUB_PATH
