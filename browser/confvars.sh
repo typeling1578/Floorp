@@ -7,6 +7,8 @@ MOZ_APP_VENDOR=Mozilla
 MOZ_APP_NAME=floorp
 MOZ_DISTRIBUTION_ID=one.ablaze
 MOZ_APP_UA_NAME=Firefox
+MOZ_DATA_REPORTING=
+MOZ_TELEMETRY_REPORTING=
 
 if test "$OS_ARCH" = "WINNT"; then
   if ! test "$HAVE_64BIT_BUILD"; then
