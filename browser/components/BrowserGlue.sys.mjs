@@ -7,6 +7,8 @@ import { XPCOMUtils } from "resource://gre/modules/XPCOMUtils.sys.mjs";
 
 const lazy = {};
 
+ChromeUtils.importESModule("resource:///modules/FloorpStartup.sys.mjs");
+
 ChromeUtils.defineESModuleGetters(lazy, {
   ActorManagerParent: "resource://gre/modules/ActorManagerParent.sys.mjs",
   AppMenuNotifications: "resource://gre/modules/AppMenuNotifications.sys.mjs",
