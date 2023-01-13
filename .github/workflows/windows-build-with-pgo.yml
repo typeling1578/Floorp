@@ -32,7 +32,7 @@ jobs:
       run: |
         pip install apt-select
         apt-select
-        sudo cp /home/user/sources.list /etc/apt/sources.list
+        sudo cp sources.list /etc/apt/sources.list
         sudo apt update
 
     - name: Setup Disk & Swap Space 💿
@@ -199,7 +199,7 @@ jobs:
       run: |
         pip install apt-select
         apt-select
-        sudo cp /home/user/sources.list /etc/apt/sources.list
+        sudo cp sources.list /etc/apt/sources.list
         sudo apt update
 
     - name: Setup Disk & Swap Space 💿
