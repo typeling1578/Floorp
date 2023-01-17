@@ -1,6 +1,8 @@
 name: Windows x86_64 Build with PGO
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  push:
 
 jobs:
   build-with-enable-profile-generate:
