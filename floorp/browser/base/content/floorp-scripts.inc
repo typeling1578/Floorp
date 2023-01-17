@@ -15,7 +15,7 @@ Services.scriptloader.loadSubScript("chrome://browser/content/browser-design.js"
 // This function is called when the floorp browser window is loaded. needs Delay.
 document.addEventListener("DOMContentLoaded", () => {
     Services.scriptloader.loadSubScript("chrome://browser/content/browser-UI-custom.js", this);
-    Services.scriptloader.loadSubScript("chrome://browser/content/browser-manager-sidebar.js", this);
+    Services.scriptloader.loadSubScript("chrome://browser/content/browser-manager-sidebar-core.js", this);
     Services.scriptloader.loadSubScript("chrome://browser/content/browser-undo-closed-tab.js", this);
     Services.scriptloader.loadSubScript("chrome://browser/content/browser-startup.js", this);
     Services.scriptloader.loadSubScript("chrome://browser/content/browser-statusbar.js", this);

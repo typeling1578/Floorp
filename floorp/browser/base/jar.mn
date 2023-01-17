@@ -6,7 +6,7 @@ browser.jar:
 %  content browser %content/browser/ contentaccessible=yes
 
   content/browser/browser-UI-custom.js          (content/browser-UI-custom.js)
-  content/browser/browser-manager-sidebar.js    (content/browser-manager-sidebar.js)
+  content/browser/browser-manager-sidebar-core.js    (content/browser-manager-sidebar-core.js)
   content/browser/browser-design.js             (content/browser-design.js)
   content/browser/browser-startup.js            (content/browser-startup.js)
   content/browser/browser-statusbar.js          (content/browser-statusbar.js)
