@@ -108,6 +108,102 @@ function readBMSData() {
     BROWSER_SIDEBAR_IDS = BROWSER_SIDEBAR_DATA["index"];
 }
 
+async function getFavicon(panelId) {
+    let url = BROWSER_SIDEBAR_DATA["data"][panelId];
+    let URL_parsed;
+    try {
+        URL_parsed = new URL(url);
+    } catch (e) {
+        console.error(e);
+        return "chrome://devtools/skin/images/globe.svg";
+    }
+
+    let iconProvider = Services.prefs.getStringPref("floorp.browser.sidebar.useIconProvider", null);
+    let icon_url;
+    if (URL_parsed.protocol.match(/^https?:$/)) {
+        switch (iconProvider) {
+            case "google":
+                icon_url = `https://www.google.com/s2/favicons?domain=${URL_parsed.hostname}`;
+                break;
+            case "duckduckgo":
+                icon_url = `https://external-content.duckduckgo.com/ip3/${URL_parsed.hostname}.ico`;
+                break;
+            case "yandex":
+                icon_url = `https://favicon.yandex.net/favicon/v2/${URL_parsed.origin}`;
+                break;
+            case "hatena":
+                icon_url = `https://cdn-ak.favicon.st-hatena.com/?url=${URL_parsed.origin}`;
+                break;
+            default:
+                icon_url = `https://external-content.duckduckgo.com/ip3/${URL_parsed.hostname}.ico`;
+                break;
+        }
+    } else if (URL_parsed.protocol === "moz-extension:") {
+        let addon_id = URL_parsed.hostname;
+        let addon_base_url = `moz-extension://${addon_id}`;
+        icon_url = new Promise(resolve => {
+            fetch(addon_base_url + "/manifest.json")
+                .then(async(response) => {
+                    if (response.status !== 200) {
+                        throw `${response.status} ${response.statusText}`;
+                    }
+                    let addon_manifest = await response.json();
+                    let addon_icon_path = addon_manifest["icons"][
+                        Math.max(...Object.keys(addon_manifest["icons"]))
+                    ];
+                    if (addon_icon_path === undefined) throw "Icon not found.";
+                    let addon_icon_url = addon_icon_path.startsWith("/") ?
+                        `${addon_base_url}${addon_icon_path}` :
+                        `${addon_base_url}/${addon_icon_path}`;
+                    resolve(addon_icon_url);
+                })
+                .catch(e => {
+                    console.error(e);
+                    resolve("chrome://mozapps/skin/extensions/extensionGeneric.svg");
+                });
+        });
+        if (icon_url.startsWith("chrome://")) {
+            return icon_url;
+        }
+    } else {
+        return "chrome://devtools/skin/images/globe.svg";
+    }
+
+    let icon_data_url = new Promise(resolve => {
+        fetch(icon_url)
+            .then(async(response) => {
+                if (response.status !== 200) {
+                    throw `${response.status} ${response.statusText}`;
+                }
+                let reader = new FileReader();
+                let blob_data = await response.blob();
+                // TODO: ハッシュ値を計算してソフト404を判定する。
+                let icon_data_url = await new Promise(resolve => {
+                    reader.addEventListener("load", function() {
+                        resolve(this.result);
+                    });
+                    reader.readAsDataURL(blob_data);
+                });
+                // TODO: hatenaも
+                if (icon_data_url === "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4AWIAAYAAAwAABQABggWTzwAAAABJRU5ErkJggg==") {
+                    // Yandex will return a 1px size icon with status code 200 if the icon is not available. If it matches a specific Data URL, it will be considered as a failure to acquire, and this process will be aborted.
+                    throw "Yandex 404";
+                }
+                resolve(icon_data_url);
+            })
+            .catch(e => {
+                console.error(e);
+                if (URL_parsed.protocol === "moz-extension:") {
+                    resolve("chrome://mozapps/skin/extensions/extensionGeneric.svg");
+                } else {
+                    resolve("chrome://devtools/skin/images/globe.svg");
+                }
+            });
+    });
+
+    return icon_data_url;
+}
+
 const BMSManager = {
     CURRENT_PANEL: null,
 
