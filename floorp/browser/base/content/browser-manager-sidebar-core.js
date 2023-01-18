@@ -141,7 +141,7 @@ async function getFavicon(panelId) {
     } else if (URL_parsed.protocol === "moz-extension:") {
         let addon_id = URL_parsed.hostname;
         let addon_base_url = `moz-extension://${addon_id}`;
-        icon_url = new Promise(resolve => {
+        icon_url = await new Promise(resolve => {
             fetch(addon_base_url + "/manifest.json")
                 .then(async(response) => {
                     if (response.status !== 200) {
@@ -169,7 +169,7 @@ async function getFavicon(panelId) {
         return "chrome://devtools/skin/images/globe.svg";
     }
 
-    let icon_data_url = new Promise(resolve => {
+    return await new Promise(resolve => {
         fetch(icon_url)
             .then(async(response) => {
                 if (response.status !== 200) {
@@ -200,8 +200,6 @@ async function getFavicon(panelId) {
                 }
             });
     });
-
-    return icon_data_url;
 }
 
 const BMSManager = {
