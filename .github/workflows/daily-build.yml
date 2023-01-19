@@ -1,10 +1,13 @@
-name: Windows x86_64 Build with PGO
+name: Daily Build
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 21 * * *'
 
 jobs:
-  build-with-enable-profile-generate:
-    name: Build with --enable-profile-generate
+  windows-x86-64-build-with-enable-profile-generate:
+    name: Windows x86_64 Build with --enable-profile-generate
 
     runs-on: ${{ matrix.runs-on }}
     strategy:
@@ -101,6 +104,10 @@ jobs:
         
         cp $RUNNER_USERDIR/win-crosstool/clang/lib/clang/14.0.4/lib/windows/clang_rt.profile-x86_64.lib $RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc/${VCTOOL_VERSION}/lib/x64/clang_rt.profile-x86_64.lib
 
+    - name: Set Display Version
+      run: |
+        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+
     - name: Build 🔨
       run: |
         ./mach build
@@ -117,7 +124,7 @@ jobs:
     - name: Publish 🎁
       uses: actions/upload-artifact@master
       with:
-        name: floorp-windows-x86_64-build-with-enable-profile-generate
+        name: floorp-windows-x86_64-devel-build-with-enable-profile-generate
         path: ${{ env.RUNNER_USERDIR }}/output
 
     - name: Clean up (Self-hosted only)
@@ -131,17 +138,17 @@ jobs:
         rm -rf $GITHUB_WORKSPACE
         mkdir $GITHUB_WORKSPACE
 
-  generate-profdata-and-jarlog:
-    name: Generate profdata and jarlog
+  windows-x86-64-generate-profdata-and-jarlog:
+    name: Windows x86_64 Generate profdata and jarlog
 
-    needs: build-with-enable-profile-generate
+    needs: windows-x86-64-build-with-enable-profile-generate
     runs-on: windows-2022
     
     steps:
     - uses: actions/download-artifact@v3
       name: Download artifact 📥
       with:
-        name: floorp-windows-x86_64-build-with-enable-profile-generate
+        name: floorp-windows-x86_64-devel-build-with-enable-profile-generate
         path: C:\artifact
     
     - uses: actions/checkout@v3
@@ -165,15 +172,15 @@ jobs:
     - name: Publish 🎁
       uses: actions/upload-artifact@master
       with:
-        name: floorp-windows-x86_64-profdata-and-jarlog
+        name: floorp-windows-x86_64-devel-profdata-and-jarlog
         path: |
           merged.profdata
           en-US.log
 
-  build-with-profdata-and-jarlog:
-    name: Build with profdata and jarlog
+  windows-x86-64-build-with-profdata-and-jarlog:
+    name: Windows x86_64 Build with profdata and jarlog
 
-    needs: generate-profdata-and-jarlog
+    needs: windows-x86-64-generate-profdata-and-jarlog
     runs-on: ${{ matrix.runs-on }}
     strategy:
       matrix:
@@ -237,7 +244,7 @@ jobs:
     - uses: actions/download-artifact@v3
       name: Download artifact 📥
       with:
-        name: floorp-windows-x86_64-profdata-and-jarlog
+        name: floorp-windows-x86_64-devel-profdata-and-jarlog
         path: ${{ env.RUNNER_USERDIR }}/artifact
 
     - uses: actions/checkout@v3
@@ -280,6 +287,10 @@ jobs:
         
         cp $RUNNER_USERDIR/win-crosstool/clang/lib/clang/14.0.4/lib/windows/clang_rt.profile-x86_64.lib $RUNNER_USERDIR/win-crosstool/vs2017/vc/tools/msvc/${VCTOOL_VERSION}/lib/x64/clang_rt.profile-x86_64.lib
 
+    - name: Set Display Version
+      run: |
+        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+
     - name: Build 🔨
       run: |
         ./mach build
@@ -299,7 +310,7 @@ jobs:
     - name: Publish 🎁
       uses: actions/upload-artifact@master
       with:
-        name: please-use-this-floorp-windows-x86_64-package-build-with-profdata-and-jarlog
+        name: floorp-windows-x86_64-devel-package-build-with-profdata-and-jarlog
         path: ${{ env.RUNNER_USERDIR }}/output
 
     - name: Clean up (Self-hosted only)
@@ -312,3 +323,126 @@ jobs:
         rm -rf $RUNNER_USERDIR/l10n-central
         rm -rf $GITHUB_WORKSPACE
         mkdir $GITHUB_WORKSPACE
+
+  linux-x86-64-build:
+    name: Linux x86_64 Build
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Init
+      run: |
+        export RUNNER_USERDIR=`echo ~`
+        echo "RUNNER_USERDIR=$RUNNER_USERDIR" >> $GITHUB_ENV
+
+    - name: Change PPA mirror servers
+      run: |
+        sudo perl -p -i -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://archive.ubuntu.com/ubuntu/%' /etc/apt/sources.list
+        sudo apt update
+
+    - name: Setup Disk & Swap Space 💿
+      run: |
+        echo Before:
+        free -h
+        df -h
+
+        echo
+        echo
+
+        sudo swapoff /mnt/swapfile
+        sudo rm /mnt/swapfile
+        sudo fallocate -l 10G /mnt/swapfile
+        sudo chmod 600 /mnt/swapfile
+        sudo mkswap /mnt/swapfile
+        sudo swapon /mnt/swapfile
+
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /usr/local/lib/android
+        sudo rm -rf /opt/ghc
+
+        sudo fallocate -l 10G /home/runner/swapfile2
+        sudo chmod 600 /home/runner/swapfile2
+        sudo mkswap /home/runner/swapfile2
+        sudo swapon /home/runner/swapfile2
+
+        echo
+        echo
+
+        echo After:
+        free -h
+        df -h
+
+    - uses: actions/checkout@v3
+      name: Clone 🧬
+
+    - name: Clone l10n-central 🧬
+      run: |
+        git clone --depth 1 https://github.com/Floorp-Projects/l10n-central.git $RUNNER_USERDIR/l10n-central
+
+    - name: Setup 🪛
+      run: |
+        sudo apt update
+        sudo apt install xvfb
+        mozconfig_file=(
+        'ac_add_options --with-app-name=floorp'
+        'ac_add_options --with-app-basename=Floorp'
+        'ac_add_options --with-branding=browser/branding/official'
+        'ac_add_options --disable-crashreporter'
+        'ac_add_options --disable-updater'
+        'ac_add_options --enable-proxy-bypass-protection'
+        'ac_add_options --disable-verify-mar'
+        'ac_add_options --enable-optimize="-O2"'
+        'ac_add_options --disable-tests'
+        'ac_add_options --enable-rust-simd'
+        'ac_add_options --enable-release'
+        'ac_add_options RUSTC_OPT_LEVEL=3'
+        'ac_add_options --enable-lto'
+        'ac_add_options MOZ_PGO=1'
+        'MOZ_REQUIRE_SIGNING='
+        'MOZ_DATA_REPORTING='
+        'MOZ_TELEMETRY_REPORTING='
+        'ac_add_options --enable-bootstrap'
+        'ac_add_options --with-l10n-base=$RUNNER_USERDIR/l10n-central/l10n-central'
+        'ac_add_options --with-mozilla-api-keyfile=$RUNNER_USERDIR/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/floorp/apis/api-mozilla-key'
+        'ac_add_options --with-google-location-service-api-keyfile=$RUNNER_USERDIR/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/floorp/apis/api-google-location-service-key'
+        'ac_add_options --with-google-safebrowsing-api-keyfile=$RUNNER_USERDIR/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/floorp/apis/api-google-safe-browsing-key'
+        )
+        for line in "${mozconfig_file[@]}" ; do echo $line >> mozconfig ; done
+        ./mach --no-interactive bootstrap --application-choice browser
+        export DISPLAY_VERSION=`cat browser/config/version_display.txt`
+
+    - name: Set Display Version
+      run: |
+        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+
+    - name: Build 🔨
+      run: |
+        Xvfb :2 -screen 0 1024x768x24 &
+        export DISPLAY=:2
+        ./mach build
+
+    - name: Package 📦
+      run: |
+        ./mach package
+        ./mach package-multi-locale --locales ar cs da de el en-GB en-US es-ES es-MX fr hu id it ja ja-KA ko lt nl nn-NO pl pt-BR pt-PT ru sv-SE th vi zh-CN zh-TW
+
+    - name: Copy 📂
+      run: |
+        mkdir $RUNNER_USERDIR/output
+        cp obj-x86_64-pc-linux-gnu/dist/*.tar.bz2 $RUNNER_USERDIR/output/
+
+    - name: Publish 🎁
+      uses: actions/upload-artifact@master
+      with:
+        name: floorp-linux-x86_64-devel
+        path: ${{ env.RUNNER_USERDIR }}/output
+
+  cleanup:
+    name: Clean Up
+    needs: [windows-x86-64-build-with-profdata-and-jarlog, linux-x86-64-build]
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: GeekyEggo/delete-artifact@v2.0.0
+      name: Delete unwanted artifacts
+      with:
+        name: |
+          floorp-windows-x86_64-devel-build-with-enable-profile-generate
+          floorp-windows-x86_64-devel-profdata-and-jarlog
