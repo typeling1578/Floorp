@@ -435,8 +435,8 @@ jobs:
         name: floorp-linux-x86_64-devel
         path: ${{ env.RUNNER_USERDIR }}/output
 
-  cleanup:
-    name: Clean Up
+  finish:
+    name: Finish
     needs: [windows-x86-64-build-with-profdata-and-jarlog, linux-x86-64-build]
     runs-on: ubuntu-22.04
     steps:
@@ -446,3 +446,16 @@ jobs:
         name: |
           floorp-windows-x86_64-devel-build-with-enable-profile-generate
           floorp-windows-x86_64-devel-profdata-and-jarlog
+
+    - uses: actions/download-artifact@v3
+      name: Download artifact 📥
+
+    - uses: 
+      with:
+        prerelease: true
+        tag_name: nightly
+        target_commitish: ${{ github.sha }}
+        files: |
+          ./floorp-windows-x86_64-devel-package-build-with-profdata-and-jarlog/floorp-*.en-US.win64.installer.exe
+          ./floorp-windows-x86_64-devel-package-build-with-profdata-and-jarlog/floorp-*.en-US.win64.zip
+          ./floorp-linux-x86_64-devel/*.tar.bz2
