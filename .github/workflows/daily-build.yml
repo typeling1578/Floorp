@@ -450,7 +450,16 @@ jobs:
     - uses: actions/download-artifact@v3
       name: Download artifact 📥
 
+    - uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      name: Delete old Pre-Release
+      with:
+        tag_name: nightly
+        delete_release: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - uses: softprops/action-gh-release@v1
+      name: Create Pre-Release
       with:
         prerelease: true
         tag_name: nightly
