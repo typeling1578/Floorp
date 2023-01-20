@@ -450,7 +450,7 @@ jobs:
     - uses: actions/download-artifact@v3
       name: Download artifact 📥
 
-    - uses: 
+    - uses: softprops/action-gh-release@v1
       with:
         prerelease: true
         tag_name: nightly
