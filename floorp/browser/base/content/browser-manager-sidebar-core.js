@@ -109,7 +109,7 @@ function readBMSData() {
 }
 
 async function getFavicon(panelId) {
-    let url = BROWSER_SIDEBAR_DATA["data"][panelId];
+    let url = BROWSER_SIDEBAR_DATA["data"][panelId]["url"];
     let URL_parsed;
     try {
         URL_parsed = new URL(url);
@@ -374,6 +374,35 @@ const BMSManager = {
     }
 };
 
+function updateBMSBox() {
+    for (let box of document.querySelectorAll("#sidebar-select-box > toolbarbutton")) {
+        if (box.id.startsWith("select-")) {
+            box.remove();
+        }
+    }
+    for (let BROWSER_SIDEBAR_ID of BROWSER_SIDEBAR_IDS.reverse()) {
+        let panelData = BROWSER_SIDEBAR_DATA["data"][BROWSER_SIDEBAR_ID];
+        if (!panelData) continue;
+        let box = document.createXULElement("toolbarbutton");
+        box.id = `select-${BROWSER_SIDEBAR_ID}`;
+        box.classList.add("sidepanel-icon");
+        box.classList.add("sicon-list");
+        box.setAttribute("context", "all-panel-context");
+        let panelURL = panelData["url"];
+        let STATIC_SIDEBAR = STATIC_SIDEBARS[panelURL];
+        if (STATIC_SIDEBAR) {
+            box.setAttribute("data-l10n-id", STATIC_SIDEBAR["l10n"]);
+        } else {
+            box.style.listStyleImage = `url("chrome://devtools/skin/images/globe.svg")`;
+            (async() => {
+                let icon_url = await getFavicon(BROWSER_SIDEBAR_ID);
+                box.style.listStyleImage = `url("${icon_url}")`;
+            })();
+        }
+        document.querySelector("#sidebar-select-box > .workspace").insertAdjacentElement("afterend", box);
+    }
+}
+
 // init
 (async() => {
     if (!Services.prefs.getBoolPref("floorp.browser.sidebar.enable", false)) return;
@@ -388,8 +417,10 @@ const BMSManager = {
     );
 
     readBMSData();
+    updateBMSBox();
 
     Services.prefs.addObserver(BROWSER_SIDEBAR_DATA_PREF, function() {
         readBMSData();
+        updateBMSBox();
     });
 })();
