@@ -7,6 +7,8 @@ on:
 
 jobs:
   windows-x86-64-build-with-enable-profile-generate:
+    if: (github.event_name == 'schedule' && github.repository == 'Floorp-Projects/Floorp') || (github.event_name != 'schedule')
+
     name: Windows x86_64 Build with --enable-profile-generate
 
     runs-on: ${{ matrix.runs-on }}
@@ -106,7 +108,11 @@ jobs:
 
     - name: Set Display Version
       run: |
-        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+        echo ${{ github.sha }} > browser/config/version_display.txt
+
+    - name: Change update url
+      run: |
+        sed -i 's/^URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/%DISPLAY_VERSION%/URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/beta/' ./build/application.ini.in
 
     - name: Build 🔨
       run: |
@@ -139,6 +145,8 @@ jobs:
         mkdir $GITHUB_WORKSPACE
 
   windows-x86-64-generate-profdata-and-jarlog:
+    if: (github.event_name == 'schedule' && github.repository == 'Floorp-Projects/Floorp') || (github.event_name != 'schedule')
+
     name: Windows x86_64 Generate profdata and jarlog
 
     needs: windows-x86-64-build-with-enable-profile-generate
@@ -178,6 +186,8 @@ jobs:
           en-US.log
 
   windows-x86-64-build-with-profdata-and-jarlog:
+    if: (github.event_name == 'schedule' && github.repository == 'Floorp-Projects/Floorp') || (github.event_name != 'schedule')
+
     name: Windows x86_64 Build with profdata and jarlog
 
     needs: windows-x86-64-generate-profdata-and-jarlog
@@ -289,7 +299,11 @@ jobs:
 
     - name: Set Display Version
       run: |
-        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+        echo ${{ github.sha }} > browser/config/version_display.txt
+
+    - name: Change update url
+      run: |
+        sed -i 's/^URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/%DISPLAY_VERSION%/URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/beta/' ./build/application.ini.in
 
     - name: Build 🔨
       run: |
@@ -325,6 +339,7 @@ jobs:
         mkdir $GITHUB_WORKSPACE
 
   linux-x86-64-build:
+    if: (github.event_name == 'schedule' && github.repository == 'Floorp-Projects/Floorp') || (github.event_name != 'schedule')
     name: Linux x86_64 Build
     runs-on: ubuntu-22.04
     steps:
@@ -411,7 +426,11 @@ jobs:
 
     - name: Set Display Version
       run: |
-        echo `cat browser/config/version_display.txt`-${{ github.sha }} > browser/config/version_display.txt
+        echo ${{ github.sha }} > browser/config/version_display.txt
+
+    - name: Change update url
+      run: |
+        sed -i 's/^URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/%DISPLAY_VERSION%/URL=https:\/\/@MOZ_APPUPDATE_HOST@\/browser\/beta/' ./build/application.ini.in
 
     - name: Build 🔨
       run: |
@@ -436,6 +455,7 @@ jobs:
         path: ${{ env.RUNNER_USERDIR }}/output
 
   cleanup:
+    if: (github.event_name == 'schedule' && github.repository == 'Floorp-Projects/Floorp') || (github.event_name != 'schedule')
     name: Clean Up
     needs: [windows-x86-64-build-with-profdata-and-jarlog, linux-x86-64-build]
     runs-on: ubuntu-22.04

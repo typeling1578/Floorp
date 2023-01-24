@@ -21,6 +21,9 @@ const { AddonManager } = ChromeUtils.import(
 const { OS } = ChromeUtils.import(
     "resource://gre/modules/osfile.jsm"
 );
+const { setTimeout, setInterval, clearTimeout, clearInterval } = ChromeUtils.import(
+    "resource://gre/modules/Timer.jsm"
+);
 
 // Check information about startup.
 let isFirstRun = false;
@@ -199,20 +202,6 @@ if (Services.prefs.getBoolPref("floorp.isPortable", false)) {
                 "yandex" : // Setup for China
                 "duckduckgo"
         );
-}
-
-
-// Use the system's language settings.
-if (isFirstRun) {
-    let systemLocale;
-    try {
-        systemLocale = Cc["@mozilla.org/intl/ospreferences;1"].getService(
-            Ci.mozIOSPreferences
-        ).systemLocale;
-    } catch (e) { console.error(e) }
-    if (systemLocale) {
-        Services.prefs.setStringPref("intl.locale.requested", systemLocale);
-    }
 }
 
 
