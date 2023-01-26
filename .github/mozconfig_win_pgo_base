@@ -1,6 +1,5 @@
 ac_add_options --with-app-name=floorp
 ac_add_options --with-app-basename=Floorp
-ac_add_options --with-branding=browser/branding/official
 ac_add_options --disable-crashreporter
 ac_add_options --disable-maintenance-service
 ac_add_options --enable-proxy-bypass-protection
@@ -16,6 +15,10 @@ MOZ_DATA_REPORTING=
 MOZ_TELEMETRY_REPORTING=
 
 ac_add_options --enable-bootstrap
+
+ac_add_options --with-mozilla-api-keyfile="$PWD/floorp/apis/api-mozilla-key"
+ac_add_options --with-google-location-service-api-keyfile="$PWD/floorp/apis/api-google-location-service-key"
+ac_add_options --with-google-safebrowsing-api-keyfile="$PWD/floorp/apis/api-google-safe-browsing-key"
 
 export WINDOWSSDKDIR="$RUNNER_USERDIR/win-crosstool/vs2017/windows kits/10"
 export WIN32_REDIST_DIR="$RUNNER_USERDIR/win-crosstool/vs2017/vc/redist/msvc/${WIN32_REDIST_VERSION}/x64/microsoft.vc141.crt/"
