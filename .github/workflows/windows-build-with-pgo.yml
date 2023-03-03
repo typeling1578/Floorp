@@ -11,11 +11,23 @@ jobs:
       matrix:
         runs-on: ['ubuntu-22.04']
 
+    env:
+      SCCACHE_GHA_ENABLED: "on"
+      SCCACHE_CACHE_SIZE: "2G"
+      SCCACHE_GHA_VERSION: "windows-1"
+
     steps:
     - name: Init
       run: |
         export RUNNER_USERDIR=`echo ~`
         echo "RUNNER_USERDIR=$RUNNER_USERDIR" >> $GITHUB_ENV
+
+    - name: Configure sccache
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
     - name: Clean up (Self-hosted only)
       if: contains(matrix.runs-on, 'self-hosted')
@@ -177,11 +189,23 @@ jobs:
       matrix:
         runs-on: ['ubuntu-22.04']
 
+    env:
+      SCCACHE_GHA_ENABLED: "on"
+      SCCACHE_CACHE_SIZE: "2G"
+      SCCACHE_GHA_VERSION: "windows-2"
+
     steps:
     - name: Init
       run: |
         export RUNNER_USERDIR=`echo ~`
         echo "RUNNER_USERDIR=$RUNNER_USERDIR" >> $GITHUB_ENV
+
+    - name: Configure sccache
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
     - name: Clean up (Self-hosted only)
       if: contains(matrix.runs-on, 'self-hosted')
