@@ -17,10 +17,10 @@ jobs:
     - name: Expose GitHub Runtime
       uses: crazy-max/ghaction-github-runtime@v2
 
-    -  name: Env
-       run: |
-         # ACTIONS_RUNTIME_TOKEN, ACTIONS_RUNTIME_URL should be exposed
-         env|sort
+    - name: Env
+      run: |
+        # ACTIONS_RUNTIME_TOKEN, ACTIONS_RUNTIME_URL should be exposed
+        env|sort
 
     - name: Change PPA mirror servers
       run: |
