@@ -8,7 +8,7 @@ jobs:
 
     env:
       SCCACHE_GHA_ENABLED: "on"
-      SCCACHE_CACHE_SIZE: "2G"
+      SCCACHE_CACHE_SIZE: "4G"
       SCCACHE_GHA_VERSION: "linux"
 
     steps:
