@@ -6,8 +6,20 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
+    env:
+      SCCACHE_GHA_ENABLED: "on"
+      SCCACHE_CACHE_SIZE: "2G"
+      SCCACHE_GHA_VERSION: "linux"
+
     steps:
     - uses: actions/checkout@v3
+
+    - name: Configure sccache
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
     - name: Change PPA mirror servers
       run: |
@@ -75,6 +87,7 @@ jobs:
         echo 'MOZ_REQUIRE_SIGNING=' >> mozconfig
         echo 'MOZ_DATA_REPORTING=' >> mozconfig
         echo 'MOZ_TELEMETRY_REPORTING=' >> mozconfig
+        echo 'ac_add_options --with-ccache=sccache' >> mozconfig
         ./mach configure
 
     - name: Build 🔨
