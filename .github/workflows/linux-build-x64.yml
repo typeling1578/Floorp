@@ -54,8 +54,6 @@ jobs:
 
     - name: Cache
       uses: actions/cache/restore@v3
-      id: win-cache
-      continue-on-error: true
       with:
         path: |
           ~/.cache/sccache
@@ -114,7 +112,6 @@ jobs:
 
     - name: Cache
       uses: actions/cache/save@v3
-      continue-on-error: true
       with:
         path: |
           ~/.cache/sccache
