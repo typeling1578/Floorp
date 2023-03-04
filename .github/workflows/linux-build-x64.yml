@@ -85,6 +85,7 @@ jobs:
         echo 'MOZ_REQUIRE_SIGNING=' >> mozconfig
         echo 'MOZ_DATA_REPORTING=' >> mozconfig
         echo 'MOZ_TELEMETRY_REPORTING=' >> mozconfig
+        echo 'ac_add_options --with-ccache=sccache' >> mozconfig
         ./mach configure
 
     - name: sccache status
