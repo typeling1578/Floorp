@@ -66,7 +66,8 @@ jobs:
         sudo apt install xvfb
         git clone https://github.com/floorp-projects/l10n-central.git
         ./mach bootstrap
-        ~/.mozbuild/sccache/sccache --start-server
+        ~/.cargo/bin/cargo install sccache
+        ~/.cargo/bin/sccache --start-server
         echo 'ac_add_options --with-app-name=floorp' >> mozconfig
         echo 'ac_add_options --with-app-basename=Floorp' >> mozconfig
         echo 'ac_add_options --with-branding=browser/branding/official' >> mozconfig
@@ -87,7 +88,7 @@ jobs:
         echo 'MOZ_REQUIRE_SIGNING=' >> mozconfig
         echo 'MOZ_DATA_REPORTING=' >> mozconfig
         echo 'MOZ_TELEMETRY_REPORTING=' >> mozconfig
-        echo 'ac_add_options --with-ccache=sccache' >> mozconfig
+        echo 'ac_add_options --with-ccache="~/.cargo/bin/sccache"' >> mozconfig
         ./mach configure
 
     - name: sccache status
