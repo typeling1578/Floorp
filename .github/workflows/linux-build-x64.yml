@@ -9,6 +9,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: list
+      run: |
+        comm -23 <(apt-mark showmanual | sort -u) <(gzip -dc /var/log/installer/initial-status.gz | sed -n 's/^Package: //p' | sort -u)
+
     - name: Change PPA mirror servers
       run: |
         sudo perl -p -i -e 's%(deb(?:-src|)\s+)https?://(?!archive\.canonical\.com|security\.ubuntu\.com)[^\s]+%$1http://archive.ubuntu.com/ubuntu/%' /etc/apt/sources.list
