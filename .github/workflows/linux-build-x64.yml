@@ -6,6 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
+    env:
+      SCCACHE_GHA_ENABLED: "on"
+
     steps:
     - uses: actions/checkout@v3
 
@@ -49,6 +52,13 @@ jobs:
         free -h
         df -h
 
+    - name: Configure Cache Env
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+          core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
+
     - name: Create environment 🌲
       run: |
         sudo apt update
@@ -77,12 +87,20 @@ jobs:
         echo 'MOZ_TELEMETRY_REPORTING=' >> mozconfig
         ./mach configure
 
+    - name: sccache status
+      run: |
+        ~/.mozbuild/sccache/sccache --show-stats
+
     - name: Build 🔨
       run: |        
         Xvfb :2 -screen 0 1024x768x24 &
         export DISPLAY=:2
         rm -rf /home/runner/work/${{ github.event.repository.name }}/${{ github.event.repository.name }}/l10n-central/.git
         ./mach build
+
+    - name: sccache status
+      run: |
+        ~/.mozbuild/sccache/sccache --show-stats
 
     - name: Package 📦
       run: | 
