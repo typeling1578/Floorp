@@ -7,19 +7,10 @@ jobs:
     runs-on: ubuntu-20.04
 
     env:
-      SCCACHE_GHA_ENABLED: "on"
       SCCACHE_CACHE_SIZE: "4G"
 
     steps:
     - uses: actions/checkout@v3
-
-    - name: Expose GitHub Runtime
-      uses: crazy-max/ghaction-github-runtime@v2
-
-    - name: Env
-      run: |
-        # ACTIONS_RUNTIME_TOKEN, ACTIONS_RUNTIME_URL should be exposed
-        env|sort
 
     - name: Change PPA mirror servers
       run: |
@@ -60,6 +51,17 @@ jobs:
         echo After:
         free -h
         df -h
+
+    - name: Cache
+      uses: actions/cache/restore@v3
+      id: win-cache
+      continue-on-error: true
+      with:
+        path: |
+          ~/.cache/sccache
+        key: linux-${{ hashFiles("browser/config/version.txt") }}
+        restore-keys: |
+          linux-
 
     - name: Create environment 🌲
       run: |
@@ -109,3 +111,11 @@ jobs:
       with:
         name: floorp-linux-x64
         path: dist.zip
+
+    - name: Cache
+      uses: actions/cache/save@v3
+      continue-on-error: true
+      with:
+        path: |
+          ~/.cache/sccache
+        key: linux-${{ hashFiles("browser/config/version.txt") }}
