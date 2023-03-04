@@ -57,7 +57,7 @@ jobs:
       with:
         path: |
           ~/.cache/sccache
-        key: linux-${{ hashFiles("browser/config/version.txt") }}
+        key: linux-${{ hashFiles('browser/config/version.txt') }}
         restore-keys: |
           linux-
 
@@ -115,4 +115,4 @@ jobs:
       with:
         path: |
           ~/.cache/sccache
-        key: linux-${{ hashFiles("browser/config/version.txt") }}
+        key: linux-${{ hashFiles('browser/config/version.txt') }}
