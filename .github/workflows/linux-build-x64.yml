@@ -61,6 +61,10 @@ jobs:
         restore-keys: |
           linux-
 
+    - name: sccache dir
+      run: |
+        ls ~/.cache/sccache
+
     - name: Create environment 🌲
       run: |
         sudo apt update
