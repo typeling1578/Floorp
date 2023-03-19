@@ -25,8 +25,8 @@ jobs:
         
         export DISPVER=10.11.0
         
-        mkdir -p ./obj-x86_64-pc-linux-gnu/dist/
-        aria2c -o ./obj-x86_64-pc-linux-gnu/dist/floorp-10.11.0.en-US.linux-x86_64.tar.bz2 https://github.com/Floorp-Projects/Floorp/releases/download/v10.11.0/floorp-10.11.0.en-US.linux-x86_64.tar.bz2
+        mkdir -p ./obj-x86_64-pc-linux-gnu/dist
+        aria2c -d ./obj-x86_64-pc-linux-gnu/dist https://github.com/Floorp-Projects/Floorp/releases/download/v10.11.0/floorp-10.11.0.en-US.linux-x86_64.tar.bz2
         
         sudo apt install flatpak
         flatpak remote-add --user --if-not-exists --from flathub https://dl.flathub.org/repo/flathub.flatpakrepo
@@ -34,7 +34,7 @@ jobs:
         
         mkdir flatpak_build && cd flatpak_build
         mkdir tmp public && cd tmp
-        cp -r ~/.local/share/flatpak/app/org.mozilla.firefox.BaseApp/current/active/files/ .
+        cp -r ~/.local/share/flatpak/app/org.mozilla.firefox.BaseApp/current/active/files/* .
         ls
         tar -xvf ./obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2
         ls
