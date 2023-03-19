@@ -32,16 +32,22 @@ jobs:
         flatpak remote-add --user --if-not-exists --from flathub https://dl.flathub.org/repo/flathub.flatpakrepo
         flatpak install --user -y flathub org.mozilla.firefox.BaseApp//22.08 --no-deps
         
-        mkdir flatpak_build && cd flatpak_build
-        mkdir tmp public && cd tmp
-        cp -r ~/.local/share/flatpak/app/org.mozilla.firefox.BaseApp/current/active/files/* .
-        ls
-        mkdir lib && cd lib
-        tar -xvf ../../obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2
-        ls
-        cd ../
-        tar -Jcf flatpak-$DISPVER.tar.xz * && mv flatpak-$DISPVER.tar.xz ../public && cd ..
-        ls
+        mkdir ./flatpak_build
+        mkdir ./flatpak_build/tmp
+        mkdir ./flatpak_build/public
+
+        cp -r ~/.local/share/flatpak/app/org.mozilla.firefox.BaseApp/current/active/files/* ./flatpak_build/tmp/
+        ls ./flatpak_build/tmp
+
+        mkdir -p ./flatpak_build/tmp/lib
+        tar -xvf ./obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2 -C ./flatpak_build/tmp
+        ls ./flatpak_build/tmp/lib/floorp
+
+        cd ./flatpak_build/tmp
+        tar -Jcf flatpak-$DISPVER.tar.xz *
+        mv flatpak-$DISPVER.tar.xz ../public/
+        cd ../..
+        ls ./flatpak_build/public
 
     - name: Publish 🎁
       uses: actions/upload-artifact@v1
