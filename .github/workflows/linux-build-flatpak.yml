@@ -29,7 +29,7 @@ jobs:
         aria2c -o ./obj-x86_64-pc-linux-gnu/dist/floorp-10.11.0.en-US.linux-x86_64.tar.bz2 https://github.com/Floorp-Projects/Floorp/releases/download/v10.11.0/floorp-10.11.0.en-US.linux-x86_64.tar.bz2
         
         sudo apt install flatpak
-        flatpak install --user -y flathub org.mozilla.firefox.BaseApp//${FIREFOX_BASEAPP_CHANNEL} --no-deps
+        flatpak install --user -y flathub org.mozilla.firefox.BaseApp//22.08 --no-deps
         
         mkdir flatpak_build && cd flatpak_build
         mkdir tmp public && cd tmp
