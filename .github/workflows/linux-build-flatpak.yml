@@ -54,7 +54,7 @@ jobs:
         # desktopfile
         
         for size in 16 32 48 64 128; do
-          ln -s "../../../../../lib/floorp/browser/chrome/icons/default/default${size}.png" "./flatpak_build/tmp/share/icons/hicolor/${size}x${size}/apps/org.mozilla.firefox.png"
+          ln -s "../../../../../lib/floorp/browser/chrome/icons/default/default${size}.png" "./flatpak_build/tmp/share/icons/hicolor/${size}x${size}/apps/one.ablaze.floorp.png"
         done
 
         cd ./flatpak_build/tmp
