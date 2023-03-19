@@ -44,7 +44,7 @@ jobs:
         tar -xvf ./obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2 -C ./flatpak_build/tmp/lib
         ls ./flatpak_build/tmp/lib/floorp
         
-        $launch_script=(
+        launch_script=(
         '#!/bin/bash'
         'export TMPDIR=$XDG_CACHE_HOME/tmp'
         'exec /app/lib/floorp/floorp "$@"'
