@@ -36,8 +36,10 @@ jobs:
         mkdir tmp public && cd tmp
         cp -r ~/.local/share/flatpak/app/org.mozilla.firefox.BaseApp/current/active/files/* .
         ls
+        mkdir lib && cd lib
         tar -xvf ../../obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2
         ls
+        cd ../
         tar -Jcf flatpak-$DISPVER.tar.xz * && mv flatpak-$DISPVER.tar.xz ../public && cd ..
         ls
 
