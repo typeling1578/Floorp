@@ -40,7 +40,7 @@ jobs:
         ls ./flatpak_build/tmp
 
         mkdir -p ./flatpak_build/tmp/lib
-        tar -xvf ./obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2 -C ./flatpak_build/tmp
+        tar -xvf ./obj-x86_64-pc-linux-gnu/dist/floorp-$DISPVER.en-US.linux-x86_64.tar.bz2 -C ./flatpak_build/tmp/lib
         ls ./flatpak_build/tmp/lib/floorp
 
         cd ./flatpak_build/tmp
