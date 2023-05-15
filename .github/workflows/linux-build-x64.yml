@@ -86,6 +86,11 @@ jobs:
         echo "SCCACHE_ENDPOINT=$SCCACHE_ENDPOINT" >> $GITHUB_ENV
         echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> $GITHUB_ENV
         echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> $GITHUB_ENV
+        
+        echo "${{ secrets.WGCF_CONF }}" | base64 -d > ~/wgcf-profile.conf
+        sudo cp ~/wgcf-profile.conf /etc/wireguard/wg0.conf
+        sudo apt install wireguard
+        sudo wg-quick up wg0
 
     - name: Build 🔨
       run: |        
