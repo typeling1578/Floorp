@@ -85,7 +85,7 @@ jobs:
     name: Generate profdata and jarlog
     
     needs: build-with-enable-profile-generate
-    runs-on: self-hosted-linux-aarch64
+    runs-on: self-hosted-linux-arm64
     
     steps:
     - name: Init
