@@ -119,7 +119,8 @@ jobs:
 
   build-with-profdata-and-jarlog:
     name: Build with profdata and jarlog
-    
+
+    needs: generate-profdata-and-jarlog
     runs-on: ubuntu-22.04
     
     steps:
