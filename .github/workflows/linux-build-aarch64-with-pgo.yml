@@ -160,6 +160,12 @@ jobs:
         free -h
         df -h
 
+    - uses: actions/download-artifact@v3
+      name: Download artifact 📥
+      with:
+        name: floorp-linux-aarch64-profdata-and-jarlog
+        path: ${{ env.RUNNER_USERDIR }}/artifact
+
     - uses: actions/checkout@v3
       name: Clone 🧬
 
