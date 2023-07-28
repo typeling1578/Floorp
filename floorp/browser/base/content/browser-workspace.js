@@ -166,6 +166,13 @@ const workspaceFunctions = {
         for (let i = 0; i < tabs.length; i++) {
           let tab = tabs[i];
           let state = tabsStates[i][i].workspace;
+
+          if (state == undefined || state == "" || state == null) {
+            state = Services.prefs.getStringPref(
+              WORKSPACE_CURRENT_PREF
+            );
+          }
+
           tab.setAttribute("floorp-workspace", state);
         }
       }
